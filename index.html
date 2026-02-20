@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consolidação de Container</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- TELA DE CADASTRO -->
+  <div id="tela-cadastro">
+
+    <div class="header-container">
+      <div class="title-wrapper">
+        <div class="img-container">
+          <img src="img3.png" alt="Descrição da imagem">
+        </div>
+        <h1 class="main-title">Consolidação de Container</h1>
+        <div class="title-subline"></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+
+      <!-- DADOS DO CONTAINER -->
+      <div class="card card-with-header">
+        <div class="card-header">
+          <i class="fas fa-box card-icon"></i>
+          <h2>Dados do Container</h2>
+        </div>
+
+        <label>Navio</label>
+        <input id="navio" placeholder="Ex: MSC AMAZONIA">
+
+        <label>Armador (Opcional)</label>
+        <select id="armador">
+          <option value="">Selecione o armador</option>
+          <option value="Maersk">Maersk</option>
+          <option value="MSC">MSC</option>
+          <option value="CMA CGM">CMA CGM</option>
+          <option value="COSCO">COSCO</option>
+          <option value="Hapag-Lloyd">Hapag-Lloyd</option>
+          <option value="ONE">ONE (Ocean Network Express)</option>
+          <option value="Evergreen">Evergreen</option>
+          <option value="Yang Ming">Yang Ming</option>
+          <option value="HMM">HMM</option>
+          <option value="ZIM">ZIM</option>
+          <option value="PIL">PIL (Pacific International Lines)</option>
+          <option value="Wan Hai">Wan Hai</option>
+          <option value="OOCL">OOCL</option>
+          <option value="Aliança">Aliança</option>
+          <option value="Hamburg Sud">Hamburg Sud</option>
+          <option value="Safmarine">Safmarine</option>
+          <option value="APL">APL</option>
+          <option value="Seaboard Marine">Seaboard Marine</option>
+          <option value="Crowley">Crowley</option>
+          <option value="King Ocean">King Ocean</option>
+        </select>
+
+        <div class="grid-datas">
+            <div class="campo">
+                <label class="cutoff" for="cutoff">Cut-off (Opcional)</label>
+                <input id="cutoff" type="date">
+            </div>
+
+            <div class="campo">
+                <label class="etd" for="etd">ETD</label>
+                <input id="etd" type="date">
+            </div>
+
+            <div class="campo">
+                <label class="eta" for="eta">ETA</label>
+                <input id="eta" type="date">
+            </div>
+        </div>
+
+        <label>Master (Opcional)</label>
+        <input id="master" placeholder="Ex: MAEU123456789">
+
+        <!-- BOTÃO TOGGLE TRANSBORDO -->
+        <button type="button" class="btn-transbordo-toggle" id="btnTransbordoToggle" onclick="toggleTransbordo()">
+          <i class="fas fa-random"></i> Adicionar Transbordo
+        </button>
+
+        <!-- SEÇÃO DE TRANSBORDO (COLAPSÁVEL) -->
+        <div class="transbordo-section" id="transbordoSection">
+          <div class="transbordo-header">
+            <i class="fas fa-random"></i>
+            <span>Dados do Transbordo</span>
+            <button type="button" class="transbordo-remove-btn" onclick="removerTransbordo()" title="Remover transbordo">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div class="grid-datas" style="margin-top: 10px;">
+            <div class="campo">
+              <label for="transbordo-origem">Porto de Transbordo</label>
+              <input id="transbordo-origem" placeholder="Ex: Busan">
+            </div>
+            <div class="campo">
+              <label for="transbordo-destino">Porto de Destino Final</label>
+              <input id="transbordo-destino" placeholder="Ex: Santos">
+            </div>
+            <div class="campo">
+              <label for="transbordo-navio">Navio do Transbordo</label>
+              <input id="transbordo-navio" placeholder="Ex: EVER GIVEN">
+            </div>
+          </div>
+
+          <div class="grid-datas" style="margin-top: 0;">
+            <div class="campo">
+              <label for="transbordo-etd">ETD Transbordo</label>
+              <input id="transbordo-etd" type="date">
+            </div>
+            <div class="campo">
+              <label for="transbordo-eta">ETA Transbordo</label>
+              <input id="transbordo-eta" type="date">
+            </div>
+            <div class="campo">
+              <!-- espaço reservado -->
+            </div>
+          </div>
+        </div>
+
+        <!-- GRID COM 3 BOTÕES -->
+        <div class="grid-buttons-rota">
+          <button onclick="criarRota()" class="btn-with-icon">
+            <i class="fas fa-plus-circle"></i> Criar Rota
+          </button>
+
+          <button onclick="importarRotas()" class="btn-with-icon">
+            <i class="fas fa-file-upload"></i> Importar
+          </button>
+          
+          <button onclick="exportarRotas()" class="btn-with-icon">
+            <i class="fas fa-file-export"></i> Exportar
+          </button>
+        </div>
+      </div>
+
+      <!-- ADICIONAR CARGA -->
+      <div class="card card-with-header card-adicionar-carga">
+        <div class="card-header">
+          <i class="fas fa-boxes card-icon"></i>
+          <h2>Adicionar Carga</h2>
+        </div>
+
+        <div class="carga-form-area">
+          <div class="cliente-proposta">
+            <div style="flex: 1;">
+              <label>Cliente</label>
+              <input id="cliente">
+            </div>
+            <div style="flex: 1;">
+              <label>Proposta</label>
+              <input id="proposta" placeholder="Referência">
+            </div>
+          </div>
+        </div>
+
+        <div class="carga-btn-area">
+          <button onclick="adicionarCarga()" class="btn-with-icon btn-adicionar-carga">
+            <i class="fas fa-plus"></i> Adicionar Carga
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ABAS -->
+    <div class="tabs-section-route">
+      <div class="tabs-section">
+        <h3 class="section-title">
+          <i class="fas fa-map-marker-alt"></i> Origem
+        </h3>
+        <div id="abas-origem" class="tabs-grid"></div>
+      </div>
+
+      <div class="tabs-section">
+        <h3 class="section-title">
+          <i class="fas fa-flag-checkered"></i> Destino
+        </h3>
+        <div id="abas-destino" class="tabs-grid">
+          <button onclick="selecionarDestino('Santos')" class="destino-btn" id="destino-santos">Santos</button>
+          <button onclick="selecionarDestino('Navegantes')" class="destino-btn" id="destino-navegantes">Navegantes</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs-section">
+      <div class="section-title-wrapper">
+        <h3 class="section-title-content">
+          <i class="fas fa-ship"></i> Rotas Criadas <span id="rota-selecionada"></span>
+        </h3>
+        <div class="filter-buttons">
+          <button class="atualizar" id="atualizar" onclick="atualizarPage()">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+          <button class="filter-btn active" id="filter-todas" onclick="aplicarFiltro('todas')">
+            <i class="fas fa-list"></i> Todas
+          </button>
+          <button class="filter-btn" id="filter-em-andamento" onclick="aplicarFiltro('em-andamento')">
+            <i class="fas fa-play-circle"></i> Em Andamento
+          </button>
+          <button class="filter-btn" id="filter-embarcadas" onclick="aplicarFiltro('embarcadas')">
+            <i class="fas fa-check-circle"></i> Embarcadas
+          </button>
+          <div class="search-proposta-container">
+            <input type="text" id="search-proposta" placeholder="Buscar por proposta..." class="search-proposta-input">
+            <i class="fas fa-search search-proposta-icon"></i>
+          </div>
+        </div>
+      </div>
+      <div id="rotas-container" class="rotas-grid"></div>
+    </div>
+
+    <!-- Modal de confirmação para embarcar rota -->
+    <div class="ship-modal" id="shipModal">
+      <div class="ship-modal-content">
+        <h3><i class="fas fa-ship"></i> Confirmar Embarque</h3>
+        <p>Tem certeza que deseja marcar esta rota como embarcada?</p>
+        <p style="font-size: 0.9rem; color: #ff9015;">⚠️ Após marcada, não será possível adicionar ou remover cargas.</p>
+        <div class="ship-modal-buttons">
+          <button class="confirm-ship" onclick="confirmarEmbarcar()">
+            <i class="fas fa-ship"></i> Embarcar
+          </button>
+          <button class="cancel-ship" onclick="cancelarEmbarcar()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TELA RESULTADO -->
+  <div id="tela-resultado" class="hidden">
+
+    <div class="header-container">
+      <div class="title-wrapper">
+        <h1 class="main-title">Resultado da Consolidação <span id="titulo-rota" class="titulo-rota"></span></h1>
+        <div class="title-subline"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p><strong>Navio:</strong> <span id="infoNavio">-</span></p>
+      
+      <div class="edit-field">
+        <label><strong>Armador:</strong></label>
+        <select id="infoArmador">
+          <option value="">Selecione o armador</option>
+          <option value="Maersk">Maersk</option>
+          <option value="MSC">MSC</option>
+          <option value="CMA CGM">CMA CGM</option>
+          <option value="COSCO">COSCO</option>
+          <option value="Hapag-Lloyd">Hapag-Lloyd</option>
+          <option value="ONE">ONE (Ocean Network Express)</option>
+          <option value="Evergreen">Evergreen</option>
+          <option value="Yang Ming">Yang Ming</option>
+          <option value="HMM">HMM</option>
+          <option value="ZIM">ZIM</option>
+          <option value="PIL">PIL (Pacific International Lines)</option>
+          <option value="OOCL">OOCL</option>
+          <option value="Hamburg Sud">Hamburg Sud</option>
+        </select>
+      </div>
+      
+      <div class="edit-field">
+        <label><strong>Master:</strong></label>
+        <input type="text" id="infoMaster" placeholder="Ex: MAEU123456789">
+      </div>
+      
+      <div class="grid-datas">
+        <div class="edit-field">
+          <label><strong>Cut-off:</strong></label>
+          <input type="date" id="infoCutoff">
+        </div>
+        
+        <div class="edit-field">
+          <label><strong>ETD:</strong></label>
+          <input type="date" id="infoETD">
+        </div>
+        
+        <div class="edit-field">
+          <label><strong>ETA:</strong></label>
+          <input type="date" id="infoETA">
+        </div>
+      </div>
+
+      <!-- SEÇÃO TRANSBORDO NA TELA DE RESULTADO (ACCORDION) -->
+      <div id="infoTransbordoSection" class="transbordo-resultado-section">
+        <button type="button" id="btnToggleTransbordoResultado" class="btn-transbordo-accordion" onclick="toggleTransbordoResultado()">
+          <span><i class="fas fa-random"></i> Transbordo</span>
+          <i class="fas fa-chevron-down accordion-icon"></i>
+        </button>
+        <div id="infoTransbordoConteudo" class="transbordo-accordion-conteudo">
+          <div class="grid-datas" style="margin-top: 12px;">
+            <div class="edit-field">
+              <label><strong>Porto de Transbordo:</strong></label>
+              <input type="text" id="infoTransbordoOrigem" placeholder="Ex: Busan">
+            </div>
+            <div class="edit-field">
+              <label><strong>Porto de Destino Final:</strong></label>
+              <input type="text" id="infoTransbordoDestino" placeholder="Ex: Santos">
+            </div>
+            <div class="edit-field">
+              <label><strong>Navio do Transbordo:</strong></label>
+              <input type="text" id="infoTransbordoNavio" placeholder="Ex: EVER GIVEN">
+            </div>
+          </div>
+          <div class="grid-datas" style="margin-top: 12px;">
+            <div class="edit-field">
+              <label><strong>ETD Transbordo:</strong></label>
+              <input type="date" id="infoTransbordoETD">
+            </div>
+            <div class="edit-field">
+              <label><strong>ETA Transbordo:</strong></label>
+              <input type="date" id="infoTransbordoETA">
+            </div>
+            <div class="edit-field"></div>
+          </div>
+        </div>
+      </div>
+
+      <button id="btnSalvarAlteracoes" onclick="salvarAlteracoesRota()" class="btn-with-icon" style="margin-top: 15px;">
+        <i class="fas fa-save"></i> Salvar Alterações
+      </button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Proposta</th>
+          <th>Transferir</th>
+          <th>Remover</th>
+        </tr>
+      </thead>
+      <tbody id="listaCargas"></tbody>
+    </table>
+
+    <button onclick="voltarCadastro()" class="btn-back">
+      <i class="fas fa-arrow-left"></i> Voltar ao Cadastro
+    </button>
+
+  </div>
+
+</div>
+
+<!-- Modal de confirmação para deletar rota -->
+<div class="delete-modal" id="deleteModal">
+  <div class="delete-modal-content">
+    <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão</h3>
+    <p>Tem certeza que deseja deletar esta rota? Esta ação não pode ser desfeita e todas as cargas associadas serão perdidas.</p>
+    <div class="delete-modal-buttons">
+      <button class="confirm-delete" onclick="confirmarDeletarRota()">
+        <i class="fas fa-trash"></i> Deletar
+      </button>
+      <button class="cancel-delete" onclick="cancelarDeletarRota()">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para transferir carga -->
+<div class="redirect-modal" id="redirectModal">
+  <div class="redirect-modal-content">
+    <h3><i class="fas fa-exchange-alt"></i> Transferir Carga</h3>
+    
+    <p id="cargaInfo"></p>
+    
+    <p><strong>Selecione a rota de destino:</strong></p>
+    
+    <div id="redirectRouteList" class="redirect-route-list"></div>
+    
+    <div class="redirect-modal-buttons">
+      <button class="cancel-redirect" onclick="cancelarRedirecionamento()">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+      <button class="confirm-redirect" id="confirmRedirectBtn" onclick="confirmarRedirecionamento()" disabled>
+        <i class="fas fa-check"></i> Confirmar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
